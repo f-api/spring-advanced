@@ -59,7 +59,6 @@ public class JwtFilter implements Filter {
 
         UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
 
-        // HttpServletRequest 에 setAttribute 하는 게 필터의 역할인가요 ?? SRP 관점에서 어긋난 거 아닌가 생각됩니다.
         httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
         httpRequest.setAttribute("email", claims.get("email"));
         httpRequest.setAttribute("userRole", claims.get("userRole"));
