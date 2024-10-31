@@ -12,6 +12,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+// request에 있는 유저 정보 꺼내서 컨트롤러 메서드에 주입하고 있어요
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override

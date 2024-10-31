@@ -1,3 +1,4 @@
+/* 사용하는 곳이 없는 Dto
 package org.example.expert.domain.user.dto.response;
 
 import lombok.Getter;
@@ -11,3 +12,4 @@ public class UserSaveResponse {
         this.bearerToken = bearerToken;
     }
 }
+*/
