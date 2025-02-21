@@ -1,6 +1,7 @@
 package org.example.expert.domain.comment.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.domain.common.entity.Timestamped;
@@ -9,7 +10,8 @@ import org.example.expert.domain.user.entity.User;
 
 @Getter
 @Entity
-@NoArgsConstructor
+//Comment entity 상속받는 프록시 객체만 접근할 수 있도록 PROTECTED 로 설정
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 public class Comment extends Timestamped {
 
