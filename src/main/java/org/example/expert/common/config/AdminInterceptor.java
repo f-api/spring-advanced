@@ -1,8 +1,9 @@
-package org.example.expert.config;
+package org.example.expert.common.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.example.expert.common.exception.AdminPrivilegeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,35 +11,24 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
     //로깅 객체
     private static final Logger logger = LoggerFactory.getLogger(AdminInterceptor.class);
-    //타겟 엔드포인트
-    private static final List<String> ADMIN_ENDPOINTS = List.of(
-            "/admin/comments/", "/admin/users/"
-    );
 
     //요청 전
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String userRole = request.getHeader("User-Role");
-        String requestURI = request.getRequestURI();
-        //엔드포인트 타겟과 일치하는지 확인
-        boolean isAdminEndpoint = ADMIN_ENDPOINTS.stream().anyMatch(requestURI::startsWith);
         //엔드포인트에 ADMIN 이 아닌 권한의 유저가 접근할 경우
-        if (isAdminEndpoint && !"ADMIN".equals(userRole)) {
-            logger.warn("Unauthorized access attempt to {} at {}", requestURI, LocalDateTime.now());
+        if (!"ADMIN".equals(userRole)) {
+            logger.warn("Unauthorized access attempt to {} at {}", request.getRequestURI(), LocalDateTime.now());
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
             throw new AdminPrivilegeException("Access denied: Admin privileges are required");
         }
-        //엔드포인트에 ADMIN 권한의 유저가 접근할 경우
-        if (isAdminEndpoint) {
-            logger.info("Admin access granted to {} at {}", requestURI, LocalDateTime.now());
-        }
+        logger.info("Admin access granted to {} at {}", request.getRequestURI(), LocalDateTime.now());
         return true;
     }
 
