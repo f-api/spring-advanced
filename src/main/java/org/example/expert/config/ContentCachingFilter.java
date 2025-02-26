@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Component
 @WebFilter(urlPatterns = "/*", description = "Wrapping Request")
-public class ContentCashingFilter extends OncePerRequestFilter {
+public class ContentCachingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
