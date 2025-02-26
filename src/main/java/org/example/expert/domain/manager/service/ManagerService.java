@@ -33,14 +33,14 @@ public class ManagerService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        // 🔹 User가 null인지 먼저 체크
+        // 🔹 Null 체크가 제대로 실행되는지 확인
         if (todo.getUser() == null) {
             throw new InvalidRequestException("해당 Todo의 User가 존재하지 않습니다.");
         }
 
-        // 🔹 Long 타입 비교는 equals() 사용해야 함
+
         if (!todo.getUser().getId().equals(authUser.getId())) {
-            throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
+            throw new InvalidRequestException("담당자를 등록하려는 유저가 일정을 만든 유저가 아닙니다.");
         }
 
         User managerUser = userRepository.findById(managerSaveRequest.getManagerUserId())
@@ -50,8 +50,9 @@ public class ManagerService {
         managerRepository.save(manager);
 
         return new ManagerSaveResponse(manager.getId(), new UserResponse(manager.getUser().getId(), manager.getUser().getEmail()));
-
     }
+
+
 
 
     @Transactional(readOnly = true)
@@ -81,7 +82,7 @@ public class ManagerService {
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
         if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
-            throw new InvalidRequestException("해당 일정을 만든 유저가 유효하지 않습니다.");
+            throw new InvalidRequestException("일정을 만든 유저만 담당자를 삭제할 수 있습니다.");
         }
 
         Manager manager = managerRepository.findById(managerId)
@@ -94,3 +95,5 @@ public class ManagerService {
         managerRepository.delete(manager);
     }
 }
+
+
