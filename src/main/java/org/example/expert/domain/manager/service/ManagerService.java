@@ -30,30 +30,29 @@ public class ManagerService {
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
-        // 일정을 만든 유저
-        User user = User.fromAuthUser(authUser);
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        if (!ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+        // 🔹 User가 null인지 먼저 체크
+        if (todo.getUser() == null) {
+            throw new InvalidRequestException("해당 Todo의 User가 존재하지 않습니다.");
+        }
+
+        // 🔹 Long 타입 비교는 equals() 사용해야 함
+        if (!todo.getUser().getId().equals(authUser.getId())) {
             throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
         }
 
         User managerUser = userRepository.findById(managerSaveRequest.getManagerUserId())
-                .orElseThrow(() -> new InvalidRequestException("등록하려고 하는 담당자 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new InvalidRequestException("Manager not found"));
 
-        if (ObjectUtils.nullSafeEquals(user.getId(), managerUser.getId())) {
-            throw new InvalidRequestException("일정 작성자는 본인을 담당자로 등록할 수 없습니다.");
-        }
+        Manager manager = new Manager(managerUser, todo);
+        managerRepository.save(manager);
 
-        Manager newManagerUser = new Manager(managerUser, todo);
-        Manager savedManagerUser = managerRepository.save(newManagerUser);
+        return new ManagerSaveResponse(manager.getId(), new UserResponse(manager.getUser().getId(), manager.getUser().getEmail()));
 
-        return new ManagerSaveResponse(
-                savedManagerUser.getId(),
-                new UserResponse(managerUser.getId(), managerUser.getEmail())
-        );
     }
+
 
     @Transactional(readOnly = true)
     public List<ManagerResponse> getManagers(long todoId) {
