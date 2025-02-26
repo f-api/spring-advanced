@@ -1,7 +1,7 @@
 package org.example.expert.client;
 
 import org.example.expert.client.dto.WeatherDto;
-import org.example.expert.domain.common.exception.ServerException;
+import org.example.expert.exception.ServerException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,29 +22,20 @@ public class WeatherClient {
         this.restTemplate = builder.build();
     }
 
-    public String getTodayWeather() {
+    public WeatherDto[] getTodayWeather() {
         ResponseEntity<WeatherDto[]> responseEntity =
                 restTemplate.getForEntity(buildWeatherApiUri(), WeatherDto[].class);
 
-        WeatherDto[] weatherArray = responseEntity.getBody();
         if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
             throw new ServerException("날씨 데이터를 가져오는데 실패했습니다. 상태 코드: " + responseEntity.getStatusCode());
         }
 
+        WeatherDto[] weatherArray = responseEntity.getBody();
         if (weatherArray == null || weatherArray.length == 0) {
             throw new ServerException("날씨 데이터가 없습니다.");
         }
 
-
-        String today = getCurrentDate();
-
-        for (WeatherDto weatherDto : weatherArray) {
-            if (today.equals(weatherDto.getDate())) {
-                return weatherDto.getWeather();
-            }
-        }
-
-        throw new ServerException("오늘에 해당하는 날씨 데이터를 찾을 수 없습니다.");
+        return weatherArray;
     }
 
     private URI buildWeatherApiUri() {
@@ -55,9 +46,5 @@ public class WeatherClient {
                 .build()
                 .toUri();
     }
-
-    private String getCurrentDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
-        return LocalDate.now().format(formatter);
-    }
 }
+
