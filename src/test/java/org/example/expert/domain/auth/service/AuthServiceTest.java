@@ -80,7 +80,8 @@ class AuthServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getBearerToken()).isEqualTo("mockedToken");
 
-        verify(passwordEncoder, times(1)).encode(signupRequest.getPassword()); // passwordEncoder 한 번 호출됨
-        verify(userRepository, times(1)).save(any(User.class)); // userRepository 저장 호출됨
+        verify(passwordEncoder, times(1)).encode(signupRequest.getPassword());
+        verify(userRepository, times(1)).save(any(User.class));
+
     }
 }

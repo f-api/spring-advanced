@@ -1,7 +1,5 @@
 package org.example.expert.domain.todo.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
@@ -43,14 +41,14 @@ class TodoRepositoryTest {
     @Test
     @DisplayName("N+1 문제 없이 모든 Todo를 조회") //N+1을 입력하기위해서는...
     void 문제_없이_모든_Todo를_조회() {
-        // When
+        // when
         List<Todo> todos = todoRepository.findAll();
 
         for (Todo todo : todos) {
             System.out.println(todo.getUser().getEmail());
         }
 
-        // Then
+        // then
         assertThat(todos).isNotEmpty();
         assertThat(todos).hasSize(2);
         assertThat(todos.get(0).getUser()).isNotNull();

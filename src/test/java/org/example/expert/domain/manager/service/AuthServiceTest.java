@@ -107,7 +107,7 @@ class AuthServiceTest {
         User managerUser = new User("b@b.com", "password", UserRole.USER);  // 매니저로 등록할 유저
         ReflectionTestUtils.setField(managerUser, "id", managerUserId);
 
-        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId); // request dto 생성
+        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId);
 
         given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
         given(userRepository.findById(managerUserId)).willReturn(Optional.of(managerUser));

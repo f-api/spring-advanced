@@ -69,5 +69,6 @@ class CommentServiceTest {
 
         // then
         assertNotNull(result);
+
     }
 }
