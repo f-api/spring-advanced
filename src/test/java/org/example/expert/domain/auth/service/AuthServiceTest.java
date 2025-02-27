@@ -64,7 +64,7 @@ class AuthServiceTest {
 
     @Test
     void 정상적인_회원가입() {
-        // given 이메일이 존재하지 않는 경우
+    // given 이메일이 존재하지 않는 경우
         when(userRepository.existsByEmail(signupRequest.getEmail())).thenReturn(false);
         when(passwordEncoder.encode(signupRequest.getPassword())).thenReturn("hashedPassword");
 
@@ -73,10 +73,10 @@ class AuthServiceTest {
         User savedUser = new User(signupRequest.getEmail(), "hashedPassword", UserRole.USER);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        // when
+    // when
         SignupResponse response = authService.signup(signupRequest);
 
-        // then
+    // then
         assertThat(response).isNotNull();
         assertThat(response.getBearerToken()).isEqualTo("mockedToken");
 
