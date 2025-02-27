@@ -51,7 +51,7 @@ public class TodoService {
     public Page<TodoResponse> getTodos(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Page<Todo> todos = todoRepository.findAll(pageable);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
@@ -65,7 +65,7 @@ public class TodoService {
     }
 
     public TodoResponse getTodo(long todoId) {
-        Todo todo = todoRepository.findByIdWithUser(todoId)
+        Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
         User user = todo.getUser();

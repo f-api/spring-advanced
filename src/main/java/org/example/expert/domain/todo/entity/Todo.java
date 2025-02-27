@@ -41,6 +41,10 @@ public class Todo extends Timestamped {
         this.managers.add(new Manager(user, this));
     }
 
+    public Todo(String s, User testUser) {
+        super();
+    }
+
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
