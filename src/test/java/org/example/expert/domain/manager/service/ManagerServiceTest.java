@@ -27,26 +27,32 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceTest {
+class ManagerServiceTest {
 
     @Mock
     private ManagerRepository managerRepository;
+
     @Mock
     private UserRepository userRepository;
+
     @Mock
     private TodoRepository todoRepository;
+
     @InjectMocks
     private ManagerService managerService;
 
+
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+    void manager_목록_조회_시_Todo가_없다면_IRE를_던진다() {
         // given
         long todoId = 1L;
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
 
-        // when & then
-        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        // when
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class,
+                () -> managerService.getManagers(todoId));
+        // then
+        assertEquals("Todo not found", exception.getMessage());
     }
 
     @Test
@@ -68,7 +74,7 @@ class AuthServiceTest {
             managerService.saveManager(authUser, todoId, managerSaveRequest)
         );
 
-        assertEquals("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.", exception.getMessage());
+        assertEquals("해당 Todo에는 등록된 유저가 없습니다.", exception.getMessage());
     }
 
     @Test // 테스트코드 샘플
