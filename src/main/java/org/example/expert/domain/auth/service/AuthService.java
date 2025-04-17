@@ -26,13 +26,19 @@ public class AuthService {
     @Transactional
     public SignupResponse signup(SignupRequest signupRequest) {
 
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-
-        UserRole userRole = UserRole.of(signupRequest.getUserRole());
-
+        /**
+         * 기존에는 먼저 비밀번호 암호와가 먼저 일어났고 나중에 이메일이 존재하는지에 대한 검증이 이루어져
+         * 이메일이 없는 경우는 상관 없을지 몰라도 이미 존재하는 이메일을 검증했을 때는 굳이 불필요하게
+         * 비밀번호를 할 필요가 없어서 먼저 검증을 해주고 비밀번호를 인코딩 시켜주는 것이 합리적이라고
+         * 생각하여 검증 로직을 비밀번호 인코딩 로직 위로 리팩토링 시켰습니다.
+         */
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
+
+        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
+
+        UserRole userRole = UserRole.of(signupRequest.getUserRole());
 
         User newUser = new User(
                 signupRequest.getEmail(),
