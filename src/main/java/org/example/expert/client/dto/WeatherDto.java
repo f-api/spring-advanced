@@ -11,5 +11,6 @@ public class WeatherDto {
     public WeatherDto(String date, String weather) {
         this.date = date;
         this.weather = weather;
+        //포크수정
     }
 }

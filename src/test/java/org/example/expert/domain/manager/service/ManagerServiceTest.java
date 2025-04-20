@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class ManagerServiceTest {
@@ -38,17 +39,23 @@ class ManagerServiceTest {
     @InjectMocks
     private ManagerService managerService;
 
+    //✅메소드명 변경및 예상결과값 바꿔줌
+    //✅ given메소드를 사용하였으나 중복이슈로 실패 뜸 -> lenient로 바꿔줌
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+    void getManagers_호출_시_Todo가_없으면_InvalidRequestException을_던진다() {
         // given
         long todoId = 1L;
-        given(todoRepository.findById(todoId)).willReturn(Optional.empty());
+        lenient().when(todoRepository.findByIdWithUser(todoId)).thenReturn(Optional.empty());
 
         // when & then
-        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> {
+            managerService.getManagers(todoId);
+        });
+
+        assertEquals("Todo not found", exception.getMessage());
     }
 
+    //✅서비스로직고침
     @Test
     void todo의_user가_null인_경우_예외가_발생한다() {
         // given
