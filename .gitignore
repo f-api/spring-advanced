@@ -38,3 +38,5 @@ out/
 
 ### properties ###
 *.properties
+
+src/main/resources/application.yml
