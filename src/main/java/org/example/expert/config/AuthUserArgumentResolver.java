@@ -38,7 +38,9 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             @Nullable WebDataBinderFactory binderFactory
     ) {
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        //여기서 계속 오류(디버깅 모드로 실행 시 계속 잡힘)
+        //HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
         // JwtFilter 에서 set 한 userId, email, userRole 값을 가져옴
         Long userId = (Long) request.getAttribute("userId");
