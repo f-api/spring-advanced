@@ -19,15 +19,8 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        boolean hasAuthAnnotation = parameter.getParameterAnnotation(Auth.class) != null;
-        boolean isAuthUserType = parameter.getParameterType().equals(AuthUser.class);
-
-        // @Auth 어노테이션과 AuthUser 타입이 함께 사용되지 않은 경우 예외 발생
-        if (hasAuthAnnotation != isAuthUserType) {
-            throw new AuthException("@Auth와 AuthUser 타입은 함께 사용되어야 합니다.");
-        }
-
-        return hasAuthAnnotation;
+        return parameter.hasParameterAnnotation(Auth.class)
+                && parameter.getParameterType().equals(AuthUser.class);
     }
 
     @Override
@@ -43,6 +36,10 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         Long userId = (Long) request.getAttribute("userId");
         String email = (String) request.getAttribute("email");
         UserRole userRole = UserRole.of((String) request.getAttribute("userRole"));
+
+        if (userId == null || email == null || userRole == null) {
+            throw new AuthException("인증 정보가 존재하지 않습니다.");
+        }
 
         return new AuthUser(userId, email, userRole);
     }
