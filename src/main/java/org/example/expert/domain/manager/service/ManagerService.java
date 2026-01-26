@@ -35,6 +35,11 @@ public class ManagerService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
+        //todo.getUser() 가 null이면 NullPointException으로 넘어가기 때문에 명시적 체크
+        if (todo.getUser() == null) {
+            throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
+        }
+
         if (!ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
             throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
         }
