@@ -39,14 +39,23 @@ class ManagerServiceTest {
     private ManagerService managerService;
 
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+
+    // todo가 없다면 NullPointException Error 던지기;
+    public void manager_목록_조회_시_Todo가_없다면_InvalidRequestException을_던진다() {
+
         // given
+        // id 가 1임
         long todoId = 1L;
+        // 근데 empty인 상태임
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
 
         // when & then
+        // 이 부분에서는 NPE 에러를 던지는게 아니라 Manager not found를 던진다.
+        // 그렇다면 바꿀점 :
+        //    메서드명 : NPE 에러를 InvalidRequestException으로 바꿔준다.
+        //    로직 : todo가 없는거라 Manager not found가 아니라 todo not found로 바꿔야할듯
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        assertEquals("Todo not found", exception.getMessage());
     }
 
     @Test

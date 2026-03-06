@@ -19,8 +19,10 @@ class PasswordEncoderTest {
         String rawPassword = "testPassword";
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
+
+        // 먼저 입력 비밀번호부터 작성하고 인코딩 패스워드 순으로 작성해야함 ; 강의 & 이전 프로젝트 참고함
         // when
-        boolean matches = passwordEncoder.matches(encodedPassword, rawPassword);
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
 
         // then
         assertTrue(matches);

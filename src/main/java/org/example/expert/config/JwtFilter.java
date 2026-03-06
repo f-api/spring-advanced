@@ -59,7 +59,9 @@ public class JwtFilter implements Filter {
 
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
             httpRequest.setAttribute("email", claims.get("email"));
-            httpRequest.setAttribute("userRole", claims.get("userRole"));
+            httpRequest.setAttribute("userRole", userRole.name());
+
+            // userRole.name()으로 수정 ; Resolver와 jwtfilter 의 형변환 타입 일치
 
             if (url.startsWith("/admin") && !UserRole.ADMIN.equals(userRole)) {
                 log.warn("권한 부족: userId={}, role={}, URI={}", claims.getSubject(), userRole, url);
