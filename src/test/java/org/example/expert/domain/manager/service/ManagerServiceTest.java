@@ -12,6 +12,7 @@ import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,15 +39,22 @@ class ManagerServiceTest {
     @InjectMocks
     private ManagerService managerService;
 
+    @BeforeEach
+    void init() {
+        todoRepository.save(new Todo());
+    }
+
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+    public void manager_목록_조회_시_Todo가_없다면_InvalidRequestException_에러를_던진다() {
         // given
         long todoId = 1L;
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
 
         // when & then
-        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        InvalidRequestException exception = assertThrows(
+                InvalidRequestException.class,
+                () -> managerService.getManagers(todoId));
+        assertEquals("Todo not found", exception.getMessage());
     }
 
     @Test
