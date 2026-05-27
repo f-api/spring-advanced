@@ -1,4 +1,4 @@
-package org.example.expert.domain.comment.service;
+package org.example.expert.domain.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.comment.repository.CommentRepository;

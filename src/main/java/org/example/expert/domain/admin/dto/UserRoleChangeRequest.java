@@ -1,4 +1,4 @@
-package org.example.expert.domain.user.dto.request;
+package org.example.expert.domain.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
