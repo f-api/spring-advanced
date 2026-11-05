@@ -1,4 +1,4 @@
-package org.example.expert.config;
+package org.example.expert.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
