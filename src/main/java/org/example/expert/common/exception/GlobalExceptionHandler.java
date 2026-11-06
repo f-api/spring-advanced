@@ -1,4 +1,4 @@
-package org.example.expert.common;
+package org.example.expert.common.exception;
 
 import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.exception.InvalidRequestException;
