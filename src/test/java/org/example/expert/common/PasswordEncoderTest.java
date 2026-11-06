@@ -1,6 +1,6 @@
-package org.example.expert.config;
+package org.example.expert.common;
 
-import org.example.expert.common.PasswordEncoder;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,15 +15,17 @@ class PasswordEncoderTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
+	@DisplayName("Password Encoder -> matches실행되는지 롹인")
     void matches_메서드가_정상적으로_동작한다() {
         // given
         String rawPassword = "testPassword";
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
         // when
-        boolean matches = passwordEncoder.matches(encodedPassword, rawPassword);
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
 
         // then
         assertTrue(matches);
     }
+
 }
