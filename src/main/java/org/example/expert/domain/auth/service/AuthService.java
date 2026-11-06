@@ -43,8 +43,10 @@ public class AuthService {
 
 		//3. User 저장 + 토큰 생성
         User savedUser = userRepository.save(newUser);
-        String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
-        return new SignupResponse(bearerToken);
+
+		//Signup은 회원가입 담당만, 토큰생성은 로그인에서
+		//String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
+        return new SignupResponse(savedUser.getId(), savedUser.getEmail(), "가입 성공");
     }
 
     @Transactional(readOnly = true)
