@@ -33,7 +33,6 @@ public class ErrorResponse {
 		errorResponse.put("message", message);
 		errorResponse.put("timestamp", LocalDateTime.now());
 
-
 		response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
 	}
 

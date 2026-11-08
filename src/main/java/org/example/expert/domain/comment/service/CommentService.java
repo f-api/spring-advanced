@@ -42,7 +42,7 @@ public class CommentService {
         return new CommentSaveResponse(
                 savedComment.getId(),
                 savedComment.getContents(),
-                new UserResponse(user.getId(), user.getEmail())
+                new UserResponse(user.getId(), user.getEmail(), user.getUserRole())
         );
     }
 
@@ -56,7 +56,7 @@ public class CommentService {
             CommentResponse dto = new CommentResponse(
                     comment.getId(),
                     comment.getContents(),
-                    new UserResponse(user.getId(), user.getEmail())
+                    new UserResponse(user.getId(), user.getEmail(), user.getUserRole())
             );
             dtoList.add(dto);
         }
